@@ -6,8 +6,8 @@ import (
 
 	"github.com/charmbracelet/bubbles/textinput"
 	tea "github.com/charmbracelet/bubbletea"
-	"github.com/haichen-zhang/gitsw/internal/config"
-	"github.com/haichen-zhang/gitsw/internal/tui/styles"
+	"github.com/HiChen85/gitsw/internal/config"
+	"github.com/HiChen85/gitsw/internal/tui/styles"
 )
 
 // FormSubmitMsg is sent when the form is submitted.

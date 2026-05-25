@@ -4,11 +4,11 @@ import (
 	"fmt"
 
 	tea "github.com/charmbracelet/bubbletea"
-	"github.com/haichen-zhang/gitsw/internal/config"
-	"github.com/haichen-zhang/gitsw/internal/git"
-	"github.com/haichen-zhang/gitsw/internal/hook"
-	"github.com/haichen-zhang/gitsw/internal/tui/styles"
-	"github.com/haichen-zhang/gitsw/internal/tui/views"
+	"github.com/HiChen85/gitsw/internal/config"
+	"github.com/HiChen85/gitsw/internal/git"
+	"github.com/HiChen85/gitsw/internal/hook"
+	"github.com/HiChen85/gitsw/internal/tui/styles"
+	"github.com/HiChen85/gitsw/internal/tui/views"
 )
 
 type screen int

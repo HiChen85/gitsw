@@ -5,10 +5,10 @@ import (
 	"os"
 	"path/filepath"
 
-	"github.com/haichen-zhang/gitsw/internal/config"
-	"github.com/haichen-zhang/gitsw/internal/git"
-	"github.com/haichen-zhang/gitsw/internal/hook"
-	"github.com/haichen-zhang/gitsw/internal/tui"
+	"github.com/HiChen85/gitsw/internal/config"
+	"github.com/HiChen85/gitsw/internal/git"
+	"github.com/HiChen85/gitsw/internal/hook"
+	"github.com/HiChen85/gitsw/internal/tui"
 )
 
 var version = "dev"

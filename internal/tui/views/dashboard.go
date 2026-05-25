@@ -7,8 +7,8 @@ import (
 
 	tea "github.com/charmbracelet/bubbletea"
 	"github.com/charmbracelet/lipgloss"
-	"github.com/haichen-zhang/gitsw/internal/config"
-	"github.com/haichen-zhang/gitsw/internal/tui/styles"
+	"github.com/HiChen85/gitsw/internal/config"
+	"github.com/HiChen85/gitsw/internal/tui/styles"
 )
 
 // Dashboard is the main view showing the profile list.

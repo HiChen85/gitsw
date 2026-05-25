@@ -5,7 +5,7 @@ import (
 	"strings"
 
 	tea "github.com/charmbracelet/bubbletea"
-	"github.com/haichen-zhang/gitsw/internal/tui/styles"
+	"github.com/HiChen85/gitsw/internal/tui/styles"
 )
 
 // ConfirmYesMsg is sent when the user confirms deletion.

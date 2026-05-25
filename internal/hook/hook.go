@@ -9,8 +9,8 @@ import (
 	"os"
 	"strings"
 
-	"github.com/haichen-zhang/gitsw/internal/config"
-	"github.com/haichen-zhang/gitsw/internal/git"
+	"github.com/HiChen85/gitsw/internal/config"
+	"github.com/HiChen85/gitsw/internal/git"
 )
 
 // FormatIdentityBox renders a compact identity box for display before push.

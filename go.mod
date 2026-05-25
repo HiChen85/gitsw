@@ -1,4 +1,4 @@
-module github.com/haichen-zhang/gitsw
+module github.com/HiChen85/gitsw
 
 go 1.25.3
 
