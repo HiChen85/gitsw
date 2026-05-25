@@ -5,6 +5,8 @@ import (
 	"os"
 	"path/filepath"
 
+	"github.com/haichen-zhang/gitsw/internal/config"
+	"github.com/haichen-zhang/gitsw/internal/git"
 	"github.com/haichen-zhang/gitsw/internal/hook"
 )
 
@@ -54,6 +56,31 @@ func main() {
 				os.Exit(1)
 			}
 			fmt.Println("Pre-push hook removed from this repo.")
+		}
+	case "list":
+		cfg, err := config.Load()
+		if err != nil {
+			fmt.Fprintf(os.Stderr, "Error loading config: %v\n", err)
+			os.Exit(1)
+		}
+		if len(cfg.Profiles) == 0 {
+			fmt.Println("No profiles configured. Run gitsw to add one.")
+			os.Exit(0)
+		}
+
+		cwd, _ := os.Getwd()
+		var currentEmail string
+		if git.IsGitRepo(cwd) {
+			identity, _ := git.GetIdentity(cwd)
+			currentEmail = identity.Email
+		}
+
+		for _, p := range cfg.Profiles {
+			marker := "  "
+			if p.Email == currentEmail {
+				marker = "● "
+			}
+			fmt.Printf("%s%-12s %s <%s>  (%s)\n", marker, p.Nickname, p.Name, p.Email, p.Platform)
 		}
 	case "help", "--help", "-h":
 		printHelp()
