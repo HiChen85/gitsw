@@ -3,6 +3,7 @@ package main
 import (
 	"fmt"
 	"os"
+	"path/filepath"
 
 	"github.com/haichen-zhang/gitsw/internal/hook"
 )
@@ -18,6 +19,42 @@ func main() {
 	switch os.Args[1] {
 	case "hook":
 		os.Exit(hook.Run())
+	case "install":
+		global := len(os.Args) > 2 && (os.Args[2] == "-g" || os.Args[2] == "--global")
+		if global {
+			home, _ := os.UserHomeDir()
+			hooksDir := filepath.Join(home, ".gitswitch", "hooks")
+			if err := hook.InstallGlobal(home, hooksDir); err != nil {
+				fmt.Fprintf(os.Stderr, "Error: %v\n", err)
+				os.Exit(1)
+			}
+			fmt.Println("Global pre-push hook installed.")
+		} else {
+			cwd, _ := os.Getwd()
+			if err := hook.InstallLocal(cwd); err != nil {
+				fmt.Fprintf(os.Stderr, "Error: %v\n", err)
+				os.Exit(1)
+			}
+			fmt.Println("Pre-push hook installed for this repo.")
+		}
+	case "uninstall":
+		global := len(os.Args) > 2 && (os.Args[2] == "-g" || os.Args[2] == "--global")
+		if global {
+			home, _ := os.UserHomeDir()
+			hooksDir := filepath.Join(home, ".gitswitch", "hooks")
+			if err := hook.UninstallGlobal(hooksDir); err != nil {
+				fmt.Fprintf(os.Stderr, "Error: %v\n", err)
+				os.Exit(1)
+			}
+			fmt.Println("Global pre-push hook removed.")
+		} else {
+			cwd, _ := os.Getwd()
+			if err := hook.UninstallLocal(cwd); err != nil {
+				fmt.Fprintf(os.Stderr, "Error: %v\n", err)
+				os.Exit(1)
+			}
+			fmt.Println("Pre-push hook removed from this repo.")
+		}
 	case "help", "--help", "-h":
 		printHelp()
 	case "version", "--version", "-v":
