@@ -3,6 +3,8 @@ package main
 import (
 	"fmt"
 	"os"
+
+	"github.com/haichen-zhang/gitsw/internal/hook"
 )
 
 var version = "dev"
@@ -14,6 +16,8 @@ func main() {
 	}
 
 	switch os.Args[1] {
+	case "hook":
+		os.Exit(hook.Run())
 	case "help", "--help", "-h":
 		printHelp()
 	case "version", "--version", "-v":
