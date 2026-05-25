@@ -8,13 +8,28 @@ import (
 	"github.com/haichen-zhang/gitsw/internal/config"
 	"github.com/haichen-zhang/gitsw/internal/git"
 	"github.com/haichen-zhang/gitsw/internal/hook"
+	"github.com/haichen-zhang/gitsw/internal/tui"
 )
 
 var version = "dev"
 
 func main() {
 	if len(os.Args) < 2 {
-		fmt.Println("gitsw TUI mode (not yet implemented)")
+		cfg, err := config.Load()
+		if err != nil {
+			fmt.Fprintf(os.Stderr, "Error loading config: %v\n", err)
+			os.Exit(1)
+		}
+		cfgPath := config.DefaultPath()
+		cwd, _ := os.Getwd()
+		repoDir := ""
+		if git.IsGitRepo(cwd) {
+			repoDir, _ = git.GetRepoRoot(cwd)
+		}
+		if err := tui.Run(cfg, cfgPath, repoDir); err != nil {
+			fmt.Fprintf(os.Stderr, "Error: %v\n", err)
+			os.Exit(1)
+		}
 		os.Exit(0)
 	}
 
