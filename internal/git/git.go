@@ -101,6 +101,24 @@ func SetIdentity(repoDir, name, email string) error {
 	return nil
 }
 
+// GetGlobalIdentity reads user.name and user.email from the global ~/.gitconfig.
+func GetGlobalIdentity() (Identity, error) {
+	name := ""
+	email := ""
+
+	cmd := exec.Command("git", "config", "--global", "user.name")
+	if out, err := cmd.Output(); err == nil {
+		name = strings.TrimSpace(string(out))
+	}
+
+	cmd = exec.Command("git", "config", "--global", "user.email")
+	if out, err := cmd.Output(); err == nil {
+		email = strings.TrimSpace(string(out))
+	}
+
+	return Identity{Name: name, Email: email, IsLocal: false}, nil
+}
+
 // GetRepoInfo returns the absolute path and origin remote URL of the repository.
 func GetRepoInfo(repoDir string) (RepoInfo, error) {
 	// Get absolute path

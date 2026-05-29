@@ -21,6 +21,11 @@ func main() {
 			os.Exit(1)
 		}
 		cfgPath := config.DefaultPath()
+
+		if len(cfg.Profiles) == 0 {
+			importGlobalProfile(cfg, cfgPath)
+		}
+
 		cwd, _ := os.Getwd()
 		repoDir := ""
 		if git.IsGitRepo(cwd) {
@@ -106,6 +111,26 @@ func main() {
 		printHelp()
 		os.Exit(1)
 	}
+}
+
+func importGlobalProfile(cfg *config.Config, cfgPath string) {
+	identity, _ := git.GetGlobalIdentity()
+	if identity.Name == "" || identity.Email == "" {
+		return
+	}
+
+	p := config.Profile{
+		Nickname: "default",
+		Name:     identity.Name,
+		Email:    identity.Email,
+		Platform: "github",
+	}
+
+	if err := cfg.Add(p); err != nil {
+		return
+	}
+	_ = cfg.SaveTo(cfgPath)
+	fmt.Printf("Imported global git config as profile \"default\": %s <%s>\n", identity.Name, identity.Email)
 }
 
 func printHelp() {
