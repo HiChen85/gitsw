@@ -14,18 +14,15 @@ import (
 var version = "dev"
 
 func main() {
+	cfg, err := config.Load()
+	if err != nil {
+		fmt.Fprintf(os.Stderr, "Error loading config: %v\n", err)
+		os.Exit(1)
+	}
+	cfgPath := config.DefaultPath()
+	importGlobalProfile(cfg, cfgPath)
+
 	if len(os.Args) < 2 {
-		cfg, err := config.Load()
-		if err != nil {
-			fmt.Fprintf(os.Stderr, "Error loading config: %v\n", err)
-			os.Exit(1)
-		}
-		cfgPath := config.DefaultPath()
-
-		if len(cfg.Profiles) == 0 {
-			importGlobalProfile(cfg, cfgPath)
-		}
-
 		cwd, _ := os.Getwd()
 		repoDir := ""
 		if git.IsGitRepo(cwd) {
@@ -78,11 +75,6 @@ func main() {
 			fmt.Println("Pre-push hook removed from this repo.")
 		}
 	case "list":
-		cfg, err := config.Load()
-		if err != nil {
-			fmt.Fprintf(os.Stderr, "Error loading config: %v\n", err)
-			os.Exit(1)
-		}
 		if len(cfg.Profiles) == 0 {
 			fmt.Println("No profiles configured. Run gitsw to add one.")
 			os.Exit(0)
@@ -119,8 +111,13 @@ func importGlobalProfile(cfg *config.Config, cfgPath string) {
 		return
 	}
 
+	if _, found := cfg.FindByEmail(identity.Email); found {
+		return
+	}
+
+	nickname := "global"
 	p := config.Profile{
-		Nickname: "default",
+		Nickname: nickname,
 		Name:     identity.Name,
 		Email:    identity.Email,
 		Platform: "github",
@@ -130,7 +127,7 @@ func importGlobalProfile(cfg *config.Config, cfgPath string) {
 		return
 	}
 	_ = cfg.SaveTo(cfgPath)
-	fmt.Printf("Imported global git config as profile \"default\": %s <%s>\n", identity.Name, identity.Email)
+	fmt.Printf("Imported global git config as profile %q: %s <%s>\n", nickname, identity.Name, identity.Email)
 }
 
 func printHelp() {
